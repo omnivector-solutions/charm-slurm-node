@@ -1,16 +1,17 @@
-name: slurm-node
-summary: <Fill in summary here>
-maintainer: Sandor Zeestraten <sandor.zeestraten@ntnu.no>
+name: slurm-node-v2
+summary: Slurm node charm
+maintainer: omnivector <omnivector@omnivector.solutions>
 description: |
-  <Multi-line description here>
+  Slurm node charm
 tags:
   - slurm
 subordinate: false
 series:
+  - bionic
   - xenial
 requires:
   slurm-cluster:
-    interface: slurm-cluster
+    interface: slurm-cluster-v2
 storage:
   scratch:
     type: filesystem

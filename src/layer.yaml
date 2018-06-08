@@ -1,4 +1,4 @@
 includes:
-  - 'layer:slurm'
-  - 'interface:slurm-cluster'
+  - 'layer:slurm-v2'
+  - 'interface:slurm-cluster-v2'
 repo: 'https://github.com/hunt-genes/charm-slurm-node'
