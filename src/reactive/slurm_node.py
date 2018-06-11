@@ -53,13 +53,13 @@ def send_node_info(cluster_endpoint):
     flags.set_flag('slurm-node.info.sent')
 
 
-#@reactive.when('endpoint.slurm-cluster.joined')
+@reactive.when('endpoint.slurm-cluster.active.available')
 @reactive.when('endpoint.slurm-cluster.active.changed')
 @reactive.when_not('slurm-node.configured')
-def configure_node(cluster_endpoint):
+def configure_node(cluster_changed, cluster_joined):
     status_set('maintenance', 'Configuring slurm-node')
 
-    controller_data = cluster_endpoint.active_data
+    controller_data = cluster_changed.active_data
     create_spool_dir(context=controller_data)
     render_munge_key(context=controller_data)
     render_slurm_config(context=controller_data)
@@ -74,6 +74,13 @@ def configure_node(cluster_endpoint):
 @reactive.when('endpoint.slurm-cluster.joined', 'slurm-node.configured')
 def node_ready(cluster_endpoint):
     status_set('active', 'Ready')
+
+
+@reactive.when_not('endpoint.slurm-cluster.active.available')
+def controller_gone():
+    service_stop(SLURMD_SERVICE)
+    flags.clear_flag('slurm-node.configured')
+    flags.clear_flag('slurm-node.info.sent')
 
 
 @reactive.hook('config-changed')
