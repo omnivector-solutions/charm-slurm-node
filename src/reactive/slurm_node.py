@@ -23,11 +23,7 @@ import charms.reactive as reactive
 import charms.reactive.flags as flags
 
 
-# when there are any active or backup controller node changes we need to
-# a node needs to refresh its configuration state
 flags.register_trigger(when='slurm-cluster.active.changed',
-                       clear_flag='slurm-node.configured')
-flags.register_trigger(when='slurm-cluster.backup.changed',
                        clear_flag='slurm-node.configured')
 
 
@@ -46,18 +42,6 @@ def missing_controller():
     service_stop(SLURMD_SERVICE)
     flags.clear_flag('slurm-node.configured')
     flags.clear_flag('slurm-node.info.sent')
-
-
-#@reactive.when('endpoint.slurm-cluster.joined')
-#@reactive.when('endpoint.slurm-cluster.backup.available')
-#@reactive.when_not('endpoint.slurm-cluster.active.available')
-#def missing_active_controller():
-#    status_set('blocked', 'An active controller has not joined a'
-#               ' relation yet - only a backup one is present')
-#    # Stop slurmd
-#    service_stop(SLURMD_SERVICE)
-#    flags.clear_flag('slurm-node.configured')
-#    flags.clear_flag('slurm-node.info.sent')
 
 
 @reactive.when('endpoint.slurm-cluster.joined')
